@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent, Typography, Container, List, Button, ListItem} from "@mui/material";
 
 import './App.css'
 
@@ -17,7 +17,7 @@ function App() {
     const res = await fetch(url);
     const data = await res.json();
     console.log(data);
-    selectedPokemon(data);
+    setSelectedPokemon(data);
   }
 
   const fetchPokemons = async () => {
@@ -39,39 +39,59 @@ function App() {
 
   return (
     <>
-      <div>
-        <h1>Pokemons List</h1>
-        <ul>
-          {pokemons.map((pokemon, index) => 
-          <li key={index} onClick={() => fetchPokemonDetails(pokemon.url)}>
-            
+      <Container maxWidth="sm" sx={{ textAlign: "center", mt: 4 }}>
+      <Typography variant="h3" gutterBottom>
+        Pokémon List
+      </Typography>
+
+      <List>
+        {pokemons.map((pokemon, index) => (
+          <ListItem
+            component="button"
+            key={index}
+            onClick={() => fetchPokemonDetails(pokemon.url)}
+            sx={{ cursor: "pointer", color: "blue", justifyContent: "center" }}
+          >
             {pokemon.name}
+          </ListItem>
+        ))}
+      </List>
 
-          </li>)}
-        </ul>
-        
-        <button onClick={handleBack} disabled={offset == 0}>
+      <div style={{ marginTop: "20px" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleBack}
+          disabled={offset === 0}
+          sx={{ marginRight: 2 }}
+        >
           Back
-        </button>
-        <button onClick={handleNext}>
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleNext}
+        >
           Next
-        </button>
-
-
-        {selectedPokemon && (
-          <Card sx={{ mt: 4 }}>
-            <CardContent>
-              <Typography variant="h5" gutterBottom>
-                {selectedPokemon.name}
-              </Typography>
-              <Typography>Height: {selectedPokemon.height}</Typography>
-              <Typography>Weight: {selectedPokemon.weight}</Typography>
-              <Typography>Types: {selectedPokemon.types.map((t) => t.type.name).join(", ")}</Typography>
-        
-            </CardContent>
-          </Card>
-        )}
+        </Button>
       </div>
+
+      {/** Step 4: Display selected Pokémon details in a styled card */}
+      {selectedPokemon && (
+        <Card sx={{ mt: 4 }}>
+          <CardContent>
+            <Typography variant="h5" gutterBottom>
+              {selectedPokemon.name}
+            </Typography>
+            <Typography>Height: {selectedPokemon.height}</Typography>
+            <Typography>Weight: {selectedPokemon.weight}</Typography>
+            <Typography>
+              Types: {selectedPokemon.types.map((t) => t.type.name).join(", ")}
+            </Typography>
+          </CardContent>
+        </Card>
+      )}
+    </Container>
     
     </>
   )
