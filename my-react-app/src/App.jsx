@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, CardContent, Typography, Container, List, Button, ListItem} from "@mui/material";
+import { Card, CardContent, Typography, Container, List, Button, ListItem, Grid} from "@mui/material";
 
 import './App.css'
 
@@ -21,7 +21,7 @@ function App() {
   }
 
   const fetchPokemons = async () => {
-    const res = await fetch('https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=20');
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=20`);
     const data = await res.json();
     console.log(data);
     setPokemons(data.results);
@@ -29,48 +29,66 @@ function App() {
 
   const handleNext = () => {
     setOffset((prevOffset) => prevOffset + 20);
+    setSelectedPokemon(null);
   };
 
   const handleBack = () => {
     if(offset > 0) {
       setOffset((prevOffset) => prevOffset - 20);
+      setSelectedPokemon(null);
     }
   }
 
   return (
     <>
-      <Container maxWidth="sm" sx={{ textAlign: "center", mt: 4 }}>
+      <Container maxWidth="md" sx={{ mt: 4, textAlign: "center", border: "5px solid red", p: 2, backgroundColor:"darkgray"}}>
       <Typography variant="h3" gutterBottom>
         Pokémon List
       </Typography>
 
-      <List>
-        {pokemons.map((pokemon, index) => (
-          <ListItem
-            component="button"
-            key={index}
-            onClick={() => fetchPokemonDetails(pokemon.url)}
-            sx={{ cursor: "pointer", color: "blue", justifyContent: "center" }}
-          >
-            {pokemon.name}
-          </ListItem>
-        ))}
-      </List>
+      <Grid container spacing={2}>
+          {pokemons.map((pokemon, index) => (
+            <Grid item xs={3} key={index}>
+              <Button
+                fullWidth
+                variant="outlined"
+                onClick={() => fetchPokemonDetails(pokemon.url)}
+                sx={{
+                backgroundColor: "grey",
+                color: "white",
+                textTransform: "capitalize",
+                '&:hover': {
+                  backgroundColor: "darkgrey",
+                }
+              }}
+              >
+                {pokemon.name}
+              </Button>
+            </Grid>
+          ))}
+      </Grid>
 
       <div style={{ marginTop: "20px" }}>
         <Button
           variant="contained"
-          color="primary"
           onClick={handleBack}
           disabled={offset === 0}
-          sx={{ marginRight: 2 }}
+          sx={{ marginRight: 2, backgroundColor:"gray"}}
         >
           Back
         </Button>
+
         <Button
           variant="contained"
-          color="primary"
+          color="yellow"
           onClick={handleNext}
+          sx={{
+              backgroundColor: "yellow", 
+              color: "black", 
+              '&:hover': {
+                backgroundColor: "#FFD700", 
+              },
+        }}
         >
           Next
         </Button>
