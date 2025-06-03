@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, CardContent, Typography, Container, List, Button, ListItem, Grid} from "@mui/material";
+import { Card, CardContent, Typography, Container, Button, Grid} from "@mui/material";
 
 import './App.css'
 
@@ -41,14 +41,28 @@ function App() {
 
   return (
     <>
-      <Container maxWidth="md" sx={{ mt: 4, textAlign: "center", border: "5px solid red", p: 2, backgroundColor:"darkgray"}}>
-      <Typography variant="h3" gutterBottom>
+      <Typography variant="h3" gutterBottom color='white'>
         Pokémon List
       </Typography>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={2} justifyContent="center"
+       sx={{ 
+        paddingTop:"20px", 
+        paddingBottom:"20px",
+        backgroundColor:"black",
+        marginLeft:40,
+        marginRight: 40
+        }}>
           {pokemons.map((pokemon, index) => (
-            <Grid item xs={3} key={index}>
+            <Grid
+              item
+              key={index}
+              sx={{
+                width: "20%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
               <Button
                 fullWidth
                 variant="outlined"
@@ -68,12 +82,12 @@ function App() {
           ))}
       </Grid>
 
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ marginTop: "20px"}}>
         <Button
-          variant="contained"
+         
           onClick={handleBack}
           disabled={offset === 0}
-          sx={{ marginRight: 2, backgroundColor:"gray"}}
+          sx={{ marginRight: 2, backgroundColor:"gray", color:"black"}}
         >
           Back
         </Button>
@@ -96,20 +110,25 @@ function App() {
 
       {/** Step 4: Display selected Pokémon details in a styled card */}
       {selectedPokemon && (
-        <Card sx={{ mt: 4 }}>
+        <Card sx={{mt: 4, padding:"1px", marginLeft:"500px", marginRight:"500px", backgroundColor:"darkgray"}}>
           <CardContent>
-            <Typography variant="h5" gutterBottom>
-              {selectedPokemon.name}
+            <Typography variant="h5" gutterBottom color='gold'>
+              {selectedPokemon.name.charAt(0).toUpperCase() + selectedPokemon.name.slice(1)}
             </Typography>
-            <Typography>Height: {selectedPokemon.height}</Typography>
-            <Typography>Weight: {selectedPokemon.weight}</Typography>
-            <Typography>
+            <img
+              src={selectedPokemon.sprites.front_default}
+              alt={selectedPokemon.name}
+              style={{ width: "120px", height: "120px", margin: "0 auto", display: "block" }}
+            />
+            <Typography sx={{mt: 1}}>Height: {selectedPokemon.height}</Typography>
+            <Typography sx={{mt: 1}}>Weight: {selectedPokemon.weight}</Typography>
+            <Typography sx={{mt: 1}}>
               Types: {selectedPokemon.types.map((t) => t.type.name).join(", ")}
             </Typography>
           </CardContent>
         </Card>
       )}
-    </Container>
+   
     
     </>
   )
